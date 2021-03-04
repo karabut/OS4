@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <stdbool.h>
 
 #define END '.'
 #define ADDERROR -1
@@ -35,7 +36,7 @@ int add(List* list, char* value){
     return EXIT_SUCCESS;
 }
 
-void destroy(List* list){
+void clean(List* list){
     if(list == NULL){
         return;
     }
@@ -83,25 +84,22 @@ int main() {
         perror("Error at creating list");
         return 0;
     }
-    while(1){
+    while(true){
         char *result = fgets(buf, BUFSIZ, stdin);
         if (result == NULL) {
-            if (errno != 0) {
                 perror("Error at reading next line");
-            }
             break;
         }
-        if (buf[0] == END) break;
-
-        int add_res = add(lst, buf);
-        if (add_res == -1) {
+        if (buf[0] == END) {
+            break;
+        }
+        int check = add(lst, buf);
+        if (check == ADDERROR) {
             perror("Error at adding element");
             break;
         }
     };
-
     print(lst);
-    destroy(lst);
-
+    clean(lst);
     return 0;
 }
