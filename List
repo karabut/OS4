@@ -26,10 +26,10 @@ int add(List* list, char* value){
     strcpy(newNode->line, value);
     if(list->last != NULL || list->first != NULL){
         list->last->next = newNode;
-    } else {
-        if(list->last == NULL || list->first == NULL){
+    } else if(list->last == NULL || list->first == NULL){
             list->first = newNode;
-        }
+        } else{
+        return ADDERROR;
     }
     list->last = newNode;
     return EXIT_SUCCESS;
@@ -77,19 +77,17 @@ void print(List* list){
 }
 
 int main() {
-    int max_strlen = BUFSIZ;
-    char buf[max_strlen];
-
+    char buf[BUFSIZ];
     List *lst = create();
     if (lst == NULL) {
-        perror("Can't create list");
-        exit(0);
+        perror("Error at creating list");
+        return 0;
     }
     while(1){
-        char *result = fgets(buf, max_strlen, stdin);
+        char *result = fgets(buf, BUFSIZ, stdin);
         if (result == NULL) {
             if (errno != 0) {
-                perror("Can not read next line");
+                perror("Error at reading next line");
             }
             break;
         }
@@ -97,7 +95,7 @@ int main() {
 
         int add_res = add(lst, buf);
         if (add_res == -1) {
-            perror("Can not add element");
+            perror("Error at adding element");
             break;
         }
     };
@@ -105,5 +103,5 @@ int main() {
     print(lst);
     destroy(lst);
 
-    exit(0);
+    return 0;
 }
