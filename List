@@ -1,0 +1,109 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+
+#define END '.'
+#define ADDERROR -1
+
+typedef struct Node{
+ char* line;
+ struct Node* next;
+}Node;
+
+typedef struct List{
+    Node* first;
+    Node* last;
+}List;
+
+int add(List* list, char* value){
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if(newNode == NULL){
+        return ADDERROR;
+    }
+    newNode->next = NULL;
+    newNode->line = (char*)malloc(strlen(value) + 1);
+    strcpy(newNode->line, value);
+    if(list->last != NULL || list->first != NULL){
+        list->last->next = newNode;
+    } else {
+        if(list->last == NULL || list->first == NULL){
+            list->first = newNode;
+        }
+    }
+    list->last = newNode;
+    return EXIT_SUCCESS;
+}
+
+void destroy(List* list){
+    if(list == NULL){
+        return;
+    }
+    if(list->first != NULL){
+        Node* current = list->first;
+        Node* next;
+        while(current != NULL){
+            next = current->next;
+            free(current->line);
+            free(current);
+            current = next;
+        }
+    }
+    free(list);
+}
+
+List* create(){
+    List * list = (List*)malloc(sizeof(List));
+    if(list != NULL){
+        list->first = NULL;
+        list->last = NULL;
+    }
+    return list;
+}
+
+void print(List* list){
+    if(list == NULL){
+        printf("NULL \n");
+    }
+    if(list->first != NULL){
+        Node* current = list->first;
+        while(current != NULL){
+            printf("%s ", current->line);
+            current = current->next;
+        }
+    } else {
+        printf("Empty list \n");
+    }
+}
+
+int main() {
+    int max_strlen = BUFSIZ;
+    char buf[max_strlen];
+
+    List *lst = create();
+    if (lst == NULL) {
+        perror("Can't create list");
+        exit(0);
+    }
+    while(1){
+        char *result = fgets(buf, max_strlen, stdin);
+        if (result == NULL) {
+            if (errno != 0) {
+                perror("Can not read next line");
+            }
+            break;
+        }
+        if (buf[0] == END) break;
+
+        int add_res = add(lst, buf);
+        if (add_res == -1) {
+            perror("Can not add element");
+            break;
+        }
+    };
+
+    print(lst);
+    destroy(lst);
+
+    exit(0);
+}
