@@ -20,6 +20,7 @@ typedef struct List{
 int add(List* list, char* value){
     Node* newNode = (Node*)malloc(sizeof(Node));
     if(newNode == NULL){
+        perror("Error at allocating memory at adding node to list");
         return ADDERROR;
     }
     newNode->next = NULL;
@@ -55,6 +56,10 @@ void clean(List* list){
 
 List* create(){
     List * list = (List*)malloc(sizeof(List));
+    if(list == NULL){
+     perror("Error at creating list");
+    }
+    
     if(list != NULL){
         list->first = NULL;
         list->last = NULL;
@@ -81,7 +86,6 @@ int main() {
     char buf[BUFSIZ];
     List *list = create();
     if (list == NULL) {
-        perror("Error at creating list");
         return 0;
     }
     while(true){
