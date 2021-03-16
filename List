@@ -87,7 +87,7 @@ void print(List* list){
     if(list->first != NULL){
         Node* current = list->first;
         while(current != NULL){
-            printf("%s ", current->line);
+            printf("%s", current->line);
             current = current->next;
         }
     } else {
