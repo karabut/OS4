@@ -24,13 +24,25 @@ int add(List* list, char* value){
         return ADDERROR;
     }
     newNode->next = NULL;
+    
     newNode->line = (char*)malloc(strlen(value) + 1);
+    if(newNode->line == NULL){
+    perror("Error at allocating memory for a string");
+    return ADDERROR;
+    }
+    
     strcpy(newNode->line, value);
+    
     if(list->last != NULL || list->first != NULL){
+    
         list->last->next = newNode;
+        
     } else if(list->last == NULL || list->first == NULL){
+            
             list->first = newNode;
+            
         } else{
+        
         return ADDERROR;
     }
     list->last = newNode;
