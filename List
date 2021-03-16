@@ -33,11 +33,11 @@ int add(List* list, char* value){
     
     strcpy(newNode->line, value);
     
-    if(list->last != NULL || list->first != NULL){
+    if(list->last != NULL){
     
         list->last->next = newNode;
         
-    } else if(list->last == NULL || list->first == NULL){
+    } else if(list->first == NULL){
             
             list->first = newNode;
             
@@ -45,6 +45,7 @@ int add(List* list, char* value){
         
         return ADDERROR;
     }
+    
     list->last = newNode;
     return EXIT_SUCCESS;
 }
